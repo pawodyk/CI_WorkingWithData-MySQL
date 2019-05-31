@@ -1,0 +1,28 @@
+mysql> 
+mysql> /* CHALLENGE WITH MIN FUNCTION */
+mysql> 
+mysql> SELECT Name, MIN( Employee.BirthDate ) FROM Employee
+    -> ;
+ERROR 1054 (42S22): Unknown column 'Name' in 'field list'
+mysql> SELECT FirstName, LastName, MIN( Employee.BirthDate ) FROM Employee;
++-----------+----------+---------------------------+
+| FirstName | LastName | MIN( Employee.BirthDate ) |
++-----------+----------+---------------------------+
+| Andrew    | Adams    | 1947-09-19 00:00:00       |
++-----------+----------+---------------------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> /* CHALLENGE WITH MAX FUNCTION */
+mysql> 
+mysql> SELECT FirstName, LastName, MAX( Employee.HireDate ) FROM Employee;
++-----------+----------+--------------------------+
+| FirstName | LastName | MAX( Employee.HireDate ) |
++-----------+----------+--------------------------+
+| Andrew    | Adams    | 2004-03-04 00:00:00      |
++-----------+----------+--------------------------+
+1 row in set (0.01 sec)
+
+mysql> 
+mysql> 
+mysql> tee challenge_groupby.txt
