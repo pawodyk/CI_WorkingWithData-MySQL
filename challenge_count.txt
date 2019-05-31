@@ -1,0 +1,159 @@
+mysql> 
+mysql> 
+mysql> /* CHALLENGES COUNT() function */
+mysql> 
+mysql> 
+mysql> /* How Many Customers is Employee 4 the Sales Support Agent For? */
+mysql> 
+mysql> desc Customer
+    -> ;
++--------------+-------------+------+-----+---------+----------------+
+| Field        | Type        | Null | Key | Default | Extra          |
++--------------+-------------+------+-----+---------+----------------+
+| CustomerId   | int(11)     | NO   | PRI | NULL    | auto_increment |
+| FirstName    | varchar(40) | NO   |     | NULL    |                |
+| LastName     | varchar(20) | NO   |     | NULL    |                |
+| Company      | varchar(80) | YES  |     | NULL    |                |
+| Address      | varchar(70) | YES  |     | NULL    |                |
+| City         | varchar(40) | YES  |     | NULL    |                |
+| State        | varchar(40) | YES  |     | NULL    |                |
+| Country      | varchar(40) | YES  |     | NULL    |                |
+| PostalCode   | varchar(10) | YES  |     | NULL    |                |
+| Phone        | varchar(24) | YES  |     | NULL    |                |
+| Fax          | varchar(24) | YES  |     | NULL    |                |
+| Email        | varchar(60) | NO   |     | NULL    |                |
+| SupportRepId | int(11)     | YES  | MUL | NULL    |                |
++--------------+-------------+------+-----+---------+----------------+
+13 rows in set (0.00 sec)
+
+mysql> SELECT 
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> SELECT COUNT(*)
+    -> FROM Customer
+    -> WHERE SupportRepId = 4
+    -> ;
++----------+
+| COUNT(*) |
++----------+
+|       20 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT CONCAT( Employee.FirstName, " ", Employee.LastName) AS Name, COUNT(*) AS 'Number of Customers' FROM Customers
+    -> JOIN Employee ON Employee.EmployeeId = SupportRepId
+    -> WHERE Employee.FirstName = "Jane" AND Employee.LastName = "Peacock"; 
+ERROR 1146 (42S02): Table 'Chinook.Customers' doesn't exist
+mysql> SELECT CONCAT( Employee.FirstName, " ", Employee.LastName) AS Name, COUNT(*) AS 'Number of Customers' FROM Customer
+    -> JOIN Employee ON Employee.EmployeeId = Customer.SupportRepId
+    -> WHERE Employee.FirstName = "Jane" AND Employee.LastName = "Peacock"; 
++--------------+---------------------+
+| Name         | Number of Customers |
++--------------+---------------------+
+| Jane Peacock |                  21 |
++--------------+---------------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> 
+mysql> 
+mysql> /* Which Media Type is most popular? How could you answer this with a single query? You probably cannot based on what you know so far. We will get there. */
+mysql> 
+mysql> desc MediaType;
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| MediaTypeId | int(11)      | NO   | PRI | NULL    | auto_increment |
+| Name        | varchar(120) | YES  |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT MediaTypeId, Name FROM MediaType;
++-------------+-----------------------------+
+| MediaTypeId | Name                        |
++-------------+-----------------------------+
+|           1 | MPEG audio file             |
+|           2 | Protected AAC audio file    |
+|           3 | Protected MPEG-4 video file |
+|           4 | Purchased AAC audio file    |
+|           5 | AAC audio file              |
++-------------+-----------------------------+
+5 rows in set (0.00 sec)
+
+mysql> show tables
+    -> ;
++-------------------+
+| Tables_in_Chinook |
++-------------------+
+| Album             |
+| Artist            |
+| Customer          |
+| Employee          |
+| Genre             |
+| Invoice           |
+| InvoiceLine       |
+| MediaType         |
+| Playlist          |
+| PlaylistTrack     |
+| Track             |
++-------------------+
+11 rows in set (0.00 sec)
+
+mysql> desc Track;
++--------------+---------------+------+-----+---------+----------------+
+| Field        | Type          | Null | Key | Default | Extra          |
++--------------+---------------+------+-----+---------+----------------+
+| TrackId      | int(11)       | NO   | PRI | NULL    | auto_increment |
+| Name         | varchar(200)  | NO   |     | NULL    |                |
+| AlbumId      | int(11)       | YES  | MUL | NULL    |                |
+| MediaTypeId  | int(11)       | NO   | MUL | NULL    |                |
+| GenreId      | int(11)       | YES  | MUL | NULL    |                |
+| Composer     | varchar(220)  | YES  |     | NULL    |                |
+| Milliseconds | int(11)       | NO   |     | NULL    |                |
+| Bytes        | int(11)       | YES  |     | NULL    |                |
+| UnitPrice    | decimal(10,2) | NO   |     | NULL    |                |
++--------------+---------------+------+-----+---------+----------------+
+9 rows in set (0.00 sec)
+
+mysql> SELECT MediaTypeId, COUNT(*)
+    -> FROM Track
+    -> GROUP BY MediaTypeId
+    -> ORDER BY Count(*) desc;
++-------------+----------+
+| MediaTypeId | COUNT(*) |
++-------------+----------+
+|           1 |     3034 |
+|           2 |      237 |
+|           3 |      214 |
+|           5 |       11 |
+|           4 |        7 |
++-------------+----------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT MediaType.Name, COUNT(*) FROM Track JOIN MediaType ON MediaType.MediaTypeId = Track.MediaTypeId GROUP BY MediaTypeId ORDER BY Count(*) desc;
+ERROR 1052 (23000): Column 'MediaTypeId' in group statement is ambiguous
+mysql> SELECT MediaType.Name, COUNT(*) FROM Track JOIN MediaType ON MediaType.MediaTypeId = Track.MediaTypeId GROUP BY Track.MediaTypeId ORDER BY Count(*) desc;
++-----------------------------+----------+
+| Name                        | COUNT(*) |
++-----------------------------+----------+
+| MPEG audio file             |     3034 |
+| Protected AAC audio file    |      237 |
+| Protected MPEG-4 video file |      214 |
+| AAC audio file              |       11 |
+| Purchased AAC audio file    |        7 |
++-----------------------------+----------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT MediaType.Name, COUNT(*) FROM Track JOIN MediaType ON MediaType.MediaTypeId = Track.MediaTypeId GROUP BY Track.MediaTypeId ORDER BY Count(*) desc TOP 1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'TOP 1' at line 1
+mysql> SELECT MediaType.Name, COUNT(*) FROM Track JOIN MediaType ON MediaType.MediaTypeId = Track.MediaTypeId GROUP BY Track.MediaTypeId ORDER BY Count(*) desc LIMIT 1;
++-----------------+----------+
+| Name            | COUNT(*) |
++-----------------+----------+
+| MPEG audio file |     3034 |
++-----------------+----------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> 
+mysql> tee challenge_min.txt
