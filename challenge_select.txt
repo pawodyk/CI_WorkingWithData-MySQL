@@ -1,0 +1,26 @@
+mysql> /* SELECT CHALLENGES: */
+mysql> /*  Select the 'Name' column from the 'MediaType' table */
+mysql> desc MediaType
+    -> ;
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| MediaTypeId | int(11)      | NO   | PRI | NULL    | auto_increment |
+| Name        | varchar(120) | YES  |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT Name
+    -> FROM MediaType;
++-----------------------------+
+| Name                        |
++-----------------------------+
+| MPEG audio file             |
+| Protected AAC audio file    |
+| Protected MPEG-4 video file |
+| Purchased AAC audio file    |
+| AAC audio file              |
++-----------------------------+
+5 rows in set (0.00 sec)
+
+mysql> notee
