@@ -1,0 +1,399 @@
+mysql> /* CHALLENGE JOIN */
+mysql> /* Join the 'Track' table and the 'MediaType' table to create a query that shows the Name of the Track, and the Name of the Media Type. Both tables have a 'MediaTypeId' column that you can join on. */
+mysql> desc Track;
++--------------+---------------+------+-----+---------+----------------+
+| Field        | Type          | Null | Key | Default | Extra          |
++--------------+---------------+------+-----+---------+----------------+
+| TrackId      | int(11)       | NO   | PRI | NULL    | auto_increment |
+| Name         | varchar(200)  | NO   |     | NULL    |                |
+| AlbumId      | int(11)       | YES  | MUL | NULL    |                |
+| MediaTypeId  | int(11)       | NO   | MUL | NULL    |                |
+| GenreId      | int(11)       | YES  | MUL | NULL    |                |
+| Composer     | varchar(220)  | YES  |     | NULL    |                |
+| Milliseconds | int(11)       | NO   |     | NULL    |                |
+| Bytes        | int(11)       | YES  |     | NULL    |                |
+| UnitPrice    | decimal(10,2) | NO   |     | NULL    |                |
++--------------+---------------+------+-----+---------+----------------+
+9 rows in set (0.00 sec)
+
+mysql> desc MediaType
+    -> ;
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| MediaTypeId | int(11)      | NO   | PRI | NULL    | auto_increment |
+| Name        | varchar(120) | YES  |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT Track.Name AS Track, MediaType.Name AS 'Media Type'
+    -> FROM Track
+    -> INNER JOIN MediaType ON MediaType.MediaTypeId = Track.MediaTypeId;
++-----------------------------------------------------------------------------------------------------------------------------+-----------------------------+
+| Track                                                                                                                       | Media Type                  |
++-----------------------------------------------------------------------------------------------------------------------------+-----------------------------+
+| For Those About To Rock (We Salute You)                                                                                     | MPEG audio file             |
+| Put The Finger On You                                                                                                       | MPEG audio file             |
+| Let's Get It Up                                                                                                             | MPEG audio file             |
+| Inject The Venom                                                                                                            | MPEG audio file             |
+| Snowballed                                                                                                                  | MPEG audio file             |
+| Evil Walks                                                                                                                  | MPEG audio file             |
+| C.O.D.                                                                                                                      | MPEG audio file             |
+
+[...]
+
+| Band Members Discuss Tracks from "Revelations"                                                                              | Protected MPEG-4 video file |
+| Branch Closing                                                                                                              | Protected MPEG-4 video file |
+| The Return                                                                                                                  | Protected MPEG-4 video file |
+| War Pigs                                                                                                                    | Purchased AAC audio file    |
+| Symphony No. 104 in D Major "London": IV. Finale: Spiritoso                                                                 | Purchased AAC audio file    |
+| SCRIABIN: Prelude in B Major, Op. 11, No. 11                                                                                | Purchased AAC audio file    |
+| Prometheus Overture, Op. 43                                                                                                 | Purchased AAC audio file    |
+| Sonata for Solo Violin: IV: Presto                                                                                          | Purchased AAC audio file    |
+| Étude 1, In C Major - Preludio (Presto) - Liszt                                                                             | Purchased AAC audio file    |
+| Concerto for Violin, Strings and Continuo in G Major, Op. 3, No. 9: I. Allegro                                              | Purchased AAC audio file    |
+| Amanda                                                                                                                      | AAC audio file              |
+| Despertar                                                                                                                   | AAC audio file              |
+| Din Din Wo (Little Child)                                                                                                   | AAC audio file              |
+| Distance                                                                                                                    | AAC audio file              |
+| I Guess You're Right                                                                                                        | AAC audio file              |
+| I Ka Barra (Your Work)                                                                                                      | AAC audio file              |
+| Love Comes                                                                                                                  | AAC audio file              |
+| Muita Bobeira                                                                                                               | AAC audio file              |
+| OAM's Blues                                                                                                                 | AAC audio file              |
+| One Step Beyond                                                                                                             | AAC audio file              |
+| Symphony No. 3 in E-flat major, Op. 55, "Eroica" - Scherzo: Allegro Vivace                                                  | AAC audio file              |
++-----------------------------------------------------------------------------------------------------------------------------+-----------------------------+
+3503 rows in set (0.01 sec)
+
+mysql> /* Similar Query to above, but join the track table to the Genre table, show the names of the tracks and genres in the results. Figure out the columns you can join on, any aliases that you need. Filter the results to only show 'Jazz' tracks */
+mysql> 
+mysql> SELECT Track.Name AS Track, Genre.Name AS Genre
+    -> FROM Track
+    -> INNER JOIN Genre ON Genre.GenreId = Track.GenreId 
+    -> WHERE Genre.Name = 'Jazz'
+    -> ;
++--------------------------------------------------------------+-------+
+| Track                                                        | Genre |
++--------------------------------------------------------------+-------+
+| Desafinado                                                   | Jazz  |
+| Garota De Ipanema                                            | Jazz  |
+| Samba De Uma Nota Só (One Note Samba)                        | Jazz  |
+| Por Causa De Você                                            | Jazz  |
+| Ligia                                                        | Jazz  |
+| Fotografia                                                   | Jazz  |
+| Dindi (Dindi)                                                | Jazz  |
+| Se Todos Fossem Iguais A Você (Instrumental)                 | Jazz  |
+| Falando De Amor                                              | Jazz  |
+| Angela                                                       | Jazz  |
+| Corcovado (Quiet Nights Of Quiet Stars)                      | Jazz  |
+| Outra Vez                                                    | Jazz  |
+| O Boto (Bôto)                                                | Jazz  |
+
+[...]
+
+| Springsville (Alternate Take)                                | Jazz  |
+| Blues For Pablo (Alternate Take)                             | Jazz  |
+| The Meaning Of The Blues/Lament (Alternate Take)             | Jazz  |
+| I Don't Wanna Be Kissed (By Anyone But You) (Alternate Take) | Jazz  |
+| Morning Dance                                                | Jazz  |
+| Jubilee                                                      | Jazz  |
+| Rasul                                                        | Jazz  |
+| Song For Lorraine                                            | Jazz  |
+| Starburst                                                    | Jazz  |
+| Heliopolis                                                   | Jazz  |
+| It Doesn't Matter                                            | Jazz  |
+| Little Linda                                                 | Jazz  |
+| End Of Romanticism                                           | Jazz  |
+| Amanda                                                       | Jazz  |
+| Despertar                                                    | Jazz  |
+| OAM's Blues                                                  | Jazz  |
++--------------------------------------------------------------+-------+
+130 rows in set (0.00 sec)
+
+mysql> 
+mysql> 
+mysql> /* Create a Query that shows: The name of a track, the name of it's MediaType, and the name of it's genre. You'll need to join 3 tables together with the appropriate join columns. Add a filter to only show tracks with a MediaType of "Protected AAC audio file" and a Genre of "Soundtrack". */
+mysql> 
+mysql> 
+mysql> 
+mysql> SELECT Track.Name as Track, MediaType.Name AS 'Media Type', Genre.Name AS Genre
+    -> FROM Track
+    -> INNER JOIN MediaType ON MediaType.MediaTypeId = Track.MediaTypeId
+    -> INNER JOIN Genre ON Genre.GenreId = Track.GenreId 
+    -> WHERE MediaType.Name = 'Protected AAC audio file' AND Genre.Name = 'Soundtrack';
++---------------+--------------------------+------------+
+| Track         | Media Type               | Genre      |
++---------------+--------------------------+------------+
+| Koyaanisqatsi | Protected AAC audio file | Soundtrack |
++---------------+--------------------------+------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> 
+mysql> /* Filter to only show results for the 'Grunge' playlist */
+mysql> 
+mysql> 
+mysql> show tables
+    -> ;
++-------------------+
+| Tables_in_Chinook |
++-------------------+
+| Album             |
+| Artist            |
+| Customer          |
+| Employee          |
+| Genre             |
+| Invoice           |
+| InvoiceLine       |
+| MediaType         |
+| Playlist          |
+| PlaylistTrack     |
+| Track             |
++-------------------+
+11 rows in set (0.00 sec)
+
+mysql> desc Playlist
+    -> ;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| PlaylistId | int(11)      | NO   | PRI | NULL    | auto_increment |
+| Name       | varchar(120) | YES  |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+2 rows in set (0.01 sec)
+
+mysql> desc PlaylistTrack;
++------------+---------+------+-----+---------+-------+
+| Field      | Type    | Null | Key | Default | Extra |
++------------+---------+------+-----+---------+-------+
+| PlaylistId | int(11) | NO   | PRI | NULL    |       |
+| TrackId    | int(11) | NO   | PRI | NULL    |       |
++------------+---------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+
+mysql> SELECT PlaylistId, TrackId FROM Playlist
+    -> ;
+ERROR 1054 (42S22): Unknown column 'TrackId' in 'field list'
+mysql> SELECT PlaylistId, Name FROM Playlist;
++------------+----------------------------+
+| PlaylistId | Name                       |
++------------+----------------------------+
+|          1 | Music                      |
+|          2 | Movies                     |
+|          3 | TV Shows                   |
+|          4 | Audiobooks                 |
+|          5 | 90’s Music                 |
+|          6 | Audiobooks                 |
+|          7 | Movies                     |
+|          8 | Music                      |
+|          9 | Music Videos               |
+|         10 | TV Shows                   |
+|         11 | Brazilian Music            |
+|         12 | Classical                  |
+|         13 | Classical 101 - Deep Cuts  |
+|         14 | Classical 101 - Next Steps |
+|         15 | Classical 101 - The Basics |
+|         16 | Grunge                     |
+|         17 | Heavy Metal Classic        |
+|         18 | On-The-Go 1                |
++------------+----------------------------+
+18 rows in set (0.00 sec)
+
+mysql> SELECT * FROM PlaylistTrack
+    -> WHERE PlaylistId = 16;
++------------+---------+
+| PlaylistId | TrackId |
++------------+---------+
+|         16 |      52 |
+|         16 |    2003 |
+|         16 |    2004 |
+|         16 |    2005 |
+|         16 |    2007 |
+|         16 |    2010 |
+|         16 |    2013 |
+|         16 |    2194 |
+|         16 |    2195 |
+|         16 |    2198 |
+|         16 |    2206 |
+|         16 |    2512 |
+|         16 |    2516 |
+|         16 |    2550 |
+|         16 |    3367 |
++------------+---------+
+15 rows in set (0.00 sec)
+
+mysql> SELECT Playlist.Name AS Playlist, Track.Name AS Song, Album.Title AS Album, Artist.Name AS Artist
+    -> FROM PlaylistTrack
+    -> INNER JOIN Playlist ON Playlist.PlaylistId = PlaylistTrack.PlaylistId
+    -> INNER JOIN Track ON Track.TrackId = PlaylistTrack.TrackId 
+    -> INNER JOIN Album ON Album.AlbumId = Track.AlbumId
+    -> INNER JOIN Artist ON Artist.ArtistId = Album.ArtistId
+    -> WHERE PlaylistId = 16;
+ERROR 1052 (23000): Column 'PlaylistId' in where clause is ambiguous
+mysql> SELECT Playlist.Name AS Playlist, Track.Name AS Song, Album.Title AS Album, Artist.Name AS Artist
+    -> FROM PlaylistTrack
+    -> INNER JOIN Playlist ON Playlist.PlaylistId = PlaylistTrack.PlaylistId
+    -> INNER JOIN Track ON Track.TrackId = PlaylistTrack.TrackId 
+    -> INNER JOIN Album ON Album.AlbumId = Track.AlbumId
+    -> INNER JOIN Artist ON Artist.ArtistId = Album.ArtistId
+    -> WHERE PlaylistTrack.PlaylistId = 16;
++----------+-------------------------+-------------------+---------------------+
+| Playlist | Song                    | Album             | Artist              |
++----------+-------------------------+-------------------+---------------------+
+| Grunge   | Man In The Box          | Facelift          | Alice In Chains     |
+| Grunge   | Smells Like Teen Spirit | Nevermind         | Nirvana             |
+| Grunge   | In Bloom                | Nevermind         | Nirvana             |
+| Grunge   | Come As You Are         | Nevermind         | Nirvana             |
+| Grunge   | Lithium                 | Nevermind         | Nirvana             |
+| Grunge   | Drain You               | Nevermind         | Nirvana             |
+| Grunge   | On A Plain              | Nevermind         | Nirvana             |
+| Grunge   | Evenflow                | Ten               | Pearl Jam           |
+| Grunge   | Alive                   | Ten               | Pearl Jam           |
+| Grunge   | Jeremy                  | Ten               | Pearl Jam           |
+| Grunge   | Daughter                | Vs.               | Pearl Jam           |
+| Grunge   | Outshined               | A-Sides           | Soundgarden         |
+| Grunge   | Black Hole Sun          | A-Sides           | Soundgarden         |
+| Grunge   | Plush                   | Core              | Stone Temple Pilots |
+| Grunge   | Hunger Strike           | Temple of the Dog | Temple of the Dog   |
++----------+-------------------------+-------------------+---------------------+
+15 rows in set (0.00 sec)
+
+mysql> 
+mysql> 
+mysql> /* Find a playlist that contains only 1 track. */
+mysql> 
+mysql> 
+mysql> SELECT PlaylistTrack.PlaylistId, Count(TrackId) FROM PlaylistTrack
+    -> GROUP BY PlaylistTrack.PlaylistId;
++------------+----------------+
+| PlaylistId | Count(TrackId) |
++------------+----------------+
+|          1 |           3290 |
+|          3 |            213 |
+|          5 |           1477 |
+|          8 |           3290 |
+|          9 |              1 |
+|         10 |            213 |
+|         11 |             39 |
+|         12 |             75 |
+|         13 |             25 |
+|         14 |             25 |
+|         15 |             25 |
+|         16 |             15 |
+|         17 |             26 |
+|         18 |              1 |
++------------+----------------+
+14 rows in set (0.01 sec)
+
+mysql> SELECT PlaylistTrack.PlaylistId, Count(*) FROM PlaylistTrack GROUP BY PlaylistTrack.PlaylistId;
++------------+----------+
+| PlaylistId | Count(*) |
++------------+----------+
+|          1 |     3290 |
+|          3 |      213 |
+|          5 |     1477 |
+|          8 |     3290 |
+|          9 |        1 |
+|         10 |      213 |
+|         11 |       39 |
+|         12 |       75 |
+|         13 |       25 |
+|         14 |       25 |
+|         15 |       25 |
+|         16 |       15 |
+|         17 |       26 |
+|         18 |        1 |
++------------+----------+
+14 rows in set (0.01 sec)
+
+mysql> SELECT PlaylistTrack.PlaylistId, COUNT(*)
+    -> ;
+ERROR 1109 (42S02): Unknown table 'PlaylistTrack' in field list
+mysql> SELECT Playlist.Name, COUNT(PlaylistTrack.TrackId)
+    -> FROM Playlist
+    -> INNER JOIN PlaylistTrack ON PlaylistTrack.PlaylistId = Playlist.PlaylistId 
+    -> GROUP BY Playlist.PlaylistId
+    -> ;
++----------------------------+------------------------------+
+| Name                       | COUNT(PlaylistTrack.TrackId) |
++----------------------------+------------------------------+
+| Music                      |                         3290 |
+| TV Shows                   |                          213 |
+| 90’s Music                 |                         1477 |
+| Music                      |                         3290 |
+| Music Videos               |                            1 |
+| TV Shows                   |                          213 |
+| Brazilian Music            |                           39 |
+| Classical                  |                           75 |
+| Classical 101 - Deep Cuts  |                           25 |
+| Classical 101 - Next Steps |                           25 |
+| Classical 101 - The Basics |                           25 |
+| Grunge                     |                           15 |
+| Heavy Metal Classic        |                           26 |
+| On-The-Go 1                |                            1 |
++----------------------------+------------------------------+
+14 rows in set (0.00 sec)
+
+mysql> SELECT Playlist.Name, PlaylistTrack.TrackId
+    -> FROM Playlist
+    -> WHERE Playlist.Name = 'TV Shows';
+ERROR 1054 (42S22): Unknown column 'PlaylistTrack.TrackId' in 'field list'
+mysql> SELECT Playlist.Name, PlaylistTrack.TrackId FROM Playlist INNER JOIN PlaylistTrack ON PlaylistTrack.PlaylistId = Playlist.PlaylistId  WHERE Playlist.Name = 'Music Videos';
++--------------+---------+
+| Name         | TrackId |
++--------------+---------+
+| Music Videos |    3402 |
++--------------+---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT Playlist.Name, PlaylistTrack.TrackId FROM Playlist INNER JOIN PlaylistTrack ON PlaylistTrack.PlaylistId = Playlist.PlaylistId  WHERE Playlist.Name = 'On-The-Go 1';
++-------------+---------+
+| Name        | TrackId |
++-------------+---------+
+| On-The-Go 1 |     597 |
++-------------+---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT PlaylistTrack.PlaylistId, Count(*) FROM PlaylistTrack GROUP BY PlaylistTrack.PlaylistId;
++------------+----------+
+| PlaylistId | Count(*) |
++------------+----------+
+|          1 |     3290 |
+|          3 |      213 |
+|          5 |     1477 |
+|          8 |     3290 |
+|          9 |        1 |
+|         10 |      213 |
+|         11 |       39 |
+|         12 |       75 |
+|         13 |       25 |
+|         14 |       25 |
+|         15 |       25 |
+|         16 |       15 |
+|         17 |       26 |
+|         18 |        1 |
++------------+----------+
+14 rows in set (0.00 sec)
+
+mysql> SELECT PlaylistTrack.PlaylistId, Count(*) FROM PlaylistTrack GROUP BY PlaylistTrack.PlaylistId
+    -> WHERE Count(*) = 1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE Count(*) = 1' at line 2
+mysql> SELECT PlaylistTrack.PlaylistId, Count(*) FROM PlaylistTrack
+    -> WHERE COUNT(*) = 1
+    -> GROUP BY PlaylistTrack.PlaylistId;
+ERROR 1111 (HY000): Invalid use of group function
+mysql> 
+mysql> 
+mysql> 
+mysql> /* SOLUTION FROM CODE INSTITUTE: */
+mysql> SELECT Playlist.Name as Playlist, COUNT(*) From Playlist INNER JOIN PlaylistTrack on Playlist.PlaylistId = PlaylistTrack.PlaylistId  GROUP BY Playlist HAVING count(*) = 1;
++--------------+----------+
+| Playlist     | COUNT(*) |
++--------------+----------+
+| Music Videos |        1 |
+| On-The-Go 1  |        1 |
++--------------+----------+
+2 rows in set (0.00 sec)
+
+mysql> tee challenge_orderby.txt
