@@ -1,0 +1,357 @@
+mysql> /* CHALLENGES with GROUP BY */
+mysql> 
+mysql> /* How many customers do we have in the City of Berlin */
+mysql> 
+mysql> desc Customer;
++--------------+-------------+------+-----+---------+----------------+
+| Field        | Type        | Null | Key | Default | Extra          |
++--------------+-------------+------+-----+---------+----------------+
+| CustomerId   | int(11)     | NO   | PRI | NULL    | auto_increment |
+| FirstName    | varchar(40) | NO   |     | NULL    |                |
+| LastName     | varchar(20) | NO   |     | NULL    |                |
+| Company      | varchar(80) | YES  |     | NULL    |                |
+| Address      | varchar(70) | YES  |     | NULL    |                |
+| City         | varchar(40) | YES  |     | NULL    |                |
+| State        | varchar(40) | YES  |     | NULL    |                |
+| Country      | varchar(40) | YES  |     | NULL    |                |
+| PostalCode   | varchar(10) | YES  |     | NULL    |                |
+| Phone        | varchar(24) | YES  |     | NULL    |                |
+| Fax          | varchar(24) | YES  |     | NULL    |                |
+| Email        | varchar(60) | NO   |     | NULL    |                |
+| SupportRepId | int(11)     | YES  | MUL | NULL    |                |
++--------------+-------------+------+-----+---------+----------------+
+13 rows in set (0.00 sec)
+
+mysql> SELECT Country, COUNT(*)
+    -> FROM Customer
+    -> GROUP BY Country;
++----------------+----------+
+| Country        | COUNT(*) |
++----------------+----------+
+| Argentina      |        1 |
+| Australia      |        1 |
+| Austria        |        1 |
+| Belgium        |        1 |
+| Brazil         |        5 |
+| Canada         |        8 |
+| Chile          |        1 |
+| Czech Republic |        2 |
+| Denmark        |        1 |
+| Finland        |        1 |
+| France         |        5 |
+| Germany        |        4 |
+| Hungary        |        1 |
+| India          |        2 |
+| Ireland        |        1 |
+| Italy          |        1 |
+| Netherlands    |        1 |
+| Norway         |        1 |
+| Poland         |        1 |
+| Portugal       |        2 |
+| Spain          |        1 |
+| Sweden         |        1 |
+| United Kingdom |        3 |
+| USA            |       13 |
++----------------+----------+
+24 rows in set (0.00 sec)
+
+mysql> SELECT City, COUNT(*) FROM Customer GROUP BY City;
++-----------------------+----------+
+| City                  | COUNT(*) |
++-----------------------+----------+
+| Amsterdam             |        1 |
+| Bangalore             |        1 |
+| Berlin                |        2 |
+| Bordeaux              |        1 |
+| Boston                |        1 |
+| Brasília              |        1 |
+| Brussels              |        1 |
+| Budapest              |        1 |
+| Buenos Aires          |        1 |
+| Chicago               |        1 |
+| Copenhagen            |        1 |
+| Cupertino             |        1 |
+| Delhi                 |        1 |
+| Dijon                 |        1 |
+| Dublin                |        1 |
+| Edinburgh             |        1 |
+| Edmonton              |        1 |
+| Fort Worth            |        1 |
+| Frankfurt             |        1 |
+| Halifax               |        1 |
+| Helsinki              |        1 |
+| Lisbon                |        1 |
+| London                |        2 |
+| Lyon                  |        1 |
+| Madison               |        1 |
+| Madrid                |        1 |
+| Montréal              |        1 |
+| Mountain View         |        2 |
+| New York              |        1 |
+| Orlando               |        1 |
+| Oslo                  |        1 |
+| Ottawa                |        1 |
+| Paris                 |        2 |
+| Porto                 |        1 |
+| Prague                |        2 |
+| Redmond               |        1 |
+| Reno                  |        1 |
+| Rio de Janeiro        |        1 |
+| Rome                  |        1 |
+| Salt Lake City        |        1 |
+| Santiago              |        1 |
+| São José dos Campos   |        1 |
+| São Paulo             |        2 |
+| Sidney                |        1 |
+| Stockholm             |        1 |
+| Stuttgart             |        1 |
+| Toronto               |        1 |
+| Tucson                |        1 |
+| Vancouver             |        1 |
+| Vienne                |        1 |
+| Warsaw                |        1 |
+| Winnipeg              |        1 |
+| Yellowknife           |        1 |
++-----------------------+----------+
+53 rows in set (0.00 sec)
+
+mysql> SELECT City, COUNT(*) FROM Customer GROUP BY City WHERE City = 'Berlin';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE City = 'Berlin'' at line 1
+mysql> SELECT City, COUNT(*) FROM Customer WHERE City = 'Berlin' GROUP BY City;
++--------+----------+
+| City   | COUNT(*) |
++--------+----------+
+| Berlin |        2 |
++--------+----------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> 
+mysql> Desc Track;
++--------------+---------------+------+-----+---------+----------------+
+| Field        | Type          | Null | Key | Default | Extra          |
++--------------+---------------+------+-----+---------+----------------+
+| TrackId      | int(11)       | NO   | PRI | NULL    | auto_increment |
+| Name         | varchar(200)  | NO   |     | NULL    |                |
+| AlbumId      | int(11)       | YES  | MUL | NULL    |                |
+| MediaTypeId  | int(11)       | NO   | MUL | NULL    |                |
+| GenreId      | int(11)       | YES  | MUL | NULL    |                |
+| Composer     | varchar(220)  | YES  |     | NULL    |                |
+| Milliseconds | int(11)       | NO   |     | NULL    |                |
+| Bytes        | int(11)       | YES  |     | NULL    |                |
+| UnitPrice    | decimal(10,2) | NO   |     | NULL    |                |
++--------------+---------------+------+-----+---------+----------------+
+9 rows in set (0.00 sec)
+
+mysql> desc tables;
+ERROR 1146 (42S02): Table 'Chinook.tables' doesn't exist
+mysql> show tables;
++-------------------+
+| Tables_in_Chinook |
++-------------------+
+| Album             |
+| Artist            |
+| Customer          |
+| Employee          |
+| Genre             |
+| Invoice           |
+| InvoiceLine       |
+| MediaType         |
+| Playlist          |
+| PlaylistTrack     |
+| Track             |
++-------------------+
+11 rows in set (0.00 sec)
+
+mysql> desc Invoice;
++-------------------+---------------+------+-----+---------+----------------+
+| Field             | Type          | Null | Key | Default | Extra          |
++-------------------+---------------+------+-----+---------+----------------+
+| InvoiceId         | int(11)       | NO   | PRI | NULL    | auto_increment |
+| CustomerId        | int(11)       | NO   | MUL | NULL    |                |
+| InvoiceDate       | datetime      | NO   |     | NULL    |                |
+| BillingAddress    | varchar(70)   | YES  |     | NULL    |                |
+| BillingCity       | varchar(40)   | YES  |     | NULL    |                |
+| BillingState      | varchar(40)   | YES  |     | NULL    |                |
+| BillingCountry    | varchar(40)   | YES  |     | NULL    |                |
+| BillingPostalCode | varchar(10)   | YES  |     | NULL    |                |
+| Total             | decimal(10,2) | NO   |     | NULL    |                |
++-------------------+---------------+------+-----+---------+----------------+
+9 rows in set (0.00 sec)
+
+mysql> 
+mysql> /* How much has been made in sales for the track "The Woman King". */
+mysql> 
+mysql> desc InvoiceLine;
++---------------+---------------+------+-----+---------+----------------+
+| Field         | Type          | Null | Key | Default | Extra          |
++---------------+---------------+------+-----+---------+----------------+
+| InvoiceLineId | int(11)       | NO   | PRI | NULL    | auto_increment |
+| InvoiceId     | int(11)       | NO   | MUL | NULL    |                |
+| TrackId       | int(11)       | NO   | MUL | NULL    |                |
+| UnitPrice     | decimal(10,2) | NO   |     | NULL    |                |
+| Quantity      | int(11)       | NO   |     | NULL    |                |
++---------------+---------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT Track.Name, SUM( InvoiceLine.TrackId )
+    -> ;
+ERROR 1109 (42S02): Unknown table 'Track' in field list
+mysql> SELECT Track.Name, SUM( InvoiceLine.UnitPrice * InvoiceLine.Quantity )
+    -> FROM InvoiceLine
+    -> INNER JOIN Track ON Track.TrackId = InvoiceLine.TrackId
+    -> WHERE Track.Name = 'The Woman King'
+    -> GROUP BY InvoiceLine.TrackId;
++----------------+-----------------------------------------------------+
+| Name           | SUM( InvoiceLine.UnitPrice * InvoiceLine.Quantity ) |
++----------------+-----------------------------------------------------+
+| The Woman King |                                                3.98 |
++----------------+-----------------------------------------------------+
+1 row in set (0.01 sec)
+
+mysql> SELECT Track.Name, SUM( InvoiceLine.UnitPrice * InvoiceLine.Quantity ) FROM InvoiceLine INNER JOIN Track ON Track.TrackId = InvoiceLine.TrackId GROUP BY InvoiceLine.TrackId ORDER BY SUM( InvoiceLine.UnitPrice * InvoiceLine.Quantity ) desc LIMIT 10;
++------------------------------+-----------------------------------------------------+
+| Name                         | SUM( InvoiceLine.UnitPrice * InvoiceLine.Quantity ) |
++------------------------------+-----------------------------------------------------+
+| Hot Girl                     |                                                3.98 |
+| Phyllis's Wedding            |                                                3.98 |
+| Pilot                        |                                                3.98 |
+| The Fix                      |                                                3.98 |
+| How to Stop an Exploding Man |                                                3.98 |
+| Gay Witch Hunt               |                                                3.98 |
+| The Woman King               |                                                3.98 |
+| Walkabout                    |                                                3.98 |
+| The Hand of God              |                                                1.99 |
+| Genesis                      |                                                1.99 |
++------------------------------+-----------------------------------------------------+
+10 rows in set (0.01 sec)
+
+mysql> /* Create a list of the top 5 acts by number of tracks. The table should include the name of the artist and the number of tracks they have.  */
+mysql> 
+mysql> SELECT Artist.Name AS Artist, COUNT( Track.TrackId ) AS 'Number of Tracks'
+    -> ;
+ERROR 1109 (42S02): Unknown table 'Artist' in field list
+mysql> desc Track
+    -> ;
++--------------+---------------+------+-----+---------+----------------+
+| Field        | Type          | Null | Key | Default | Extra          |
++--------------+---------------+------+-----+---------+----------------+
+| TrackId      | int(11)       | NO   | PRI | NULL    | auto_increment |
+| Name         | varchar(200)  | NO   |     | NULL    |                |
+| AlbumId      | int(11)       | YES  | MUL | NULL    |                |
+| MediaTypeId  | int(11)       | NO   | MUL | NULL    |                |
+| GenreId      | int(11)       | YES  | MUL | NULL    |                |
+| Composer     | varchar(220)  | YES  |     | NULL    |                |
+| Milliseconds | int(11)       | NO   |     | NULL    |                |
+| Bytes        | int(11)       | YES  |     | NULL    |                |
+| UnitPrice    | decimal(10,2) | NO   |     | NULL    |                |
++--------------+---------------+------+-----+---------+----------------+
+9 rows in set (0.00 sec)
+
+mysql> desc Artist;
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| ArtistId | int(11)      | NO   | PRI | NULL    | auto_increment |
+| Name     | varchar(120) | YES  |     | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT Artist.Name AS Artist, COUNT( Track.TrackId ) AS 'Number of Tracks'
+    -> FROM Track
+    -> INNER JOIN Album ON Album.ArtistId = Artist.ArtistId 
+    -> ;;
+ERROR 1054 (42S22): Unknown column 'Artist.Name' in 'field list'
+ERROR: 
+No query specified
+
+mysql> desc Album
+    -> ;
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| AlbumId  | int(11)      | NO   | PRI | NULL    | auto_increment |
+| Title    | varchar(160) | NO   |     | NULL    |                |
+| ArtistId | int(11)      | NO   | MUL | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT Artist.Name AS Artist, COUNT( Track.TrackId ) AS 'Number of Tracks'
+    -> FROM Track
+    -> INNER JOIN Album ON Album.AlbumId = Track.AlbumId 
+    -> INNER JOIN Artist ON Artist.ArtistId = Album.ArtistId
+    -> GROUP BY Artist.ArtistId 
+    -> ORDER BY COUNT( Track.TrackId ) desc
+    -> LIMIT 5;
++--------------+------------------+
+| Artist       | Number of Tracks |
++--------------+------------------+
+| Iron Maiden  |              213 |
+| U2           |              135 |
+| Led Zeppelin |              114 |
+| Metallica    |              112 |
+| Deep Purple  |               92 |
++--------------+------------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT Artist.Name AS Artist, COUNT( Track.TrackId ) AS 'Number of Tracks' FROM Track INNER JOIN Album ON Album.AlbumId = Track.AlbumId  INNER JOIN Artist ON Artist.ArtistId = Album.ArtistId GROUP BY Artist.ArtistId  ORDER BY COUNT( Track.TrackId ) desc LIMIT 50;
++--------------------------------+------------------+
+| Artist                         | Number of Tracks |
++--------------------------------+------------------+
+| Iron Maiden                    |              213 |
+| U2                             |              135 |
+| Led Zeppelin                   |              114 |
+| Metallica                      |              112 |
+| Deep Purple                    |               92 |
+| Lost                           |               92 |
+| Pearl Jam                      |               67 |
+| Lenny Kravitz                  |               57 |
+| Various Artists                |               56 |
+| The Office                     |               53 |
+| Faith No More                  |               52 |
+| Van Halen                      |               52 |
+| Os Paralamas Do Sucesso        |               49 |
+| Red Hot Chili Peppers          |               48 |
+| Eric Clapton                   |               48 |
+| Queen                          |               45 |
+| Foo Fighters                   |               44 |
+| Guns N' Roses                  |               42 |
+| R.E.M.                         |               41 |
+| The Rolling Stones             |               41 |
+| Creedence Clearwater Revival   |               40 |
+| Audioslave                     |               40 |
+| Titãs                          |               38 |
+| Miles Davis                    |               37 |
+| Chico Science & Nação Zumbi    |               36 |
+| Kiss                           |               35 |
+| Smashing Pumpkins              |               34 |
+| Chico Buarque                  |               34 |
+| Green Day                      |               34 |
+| Gilberto Gil                   |               32 |
+| Jamiroquai                     |               32 |
+| Ozzy Osbourne                  |               32 |
+| Cidade Negra                   |               31 |
+| Legião Urbana                  |               31 |
+| Antônio Carlos Jobim           |               31 |
+| The Cult                       |               30 |
+| Cássia Eller                   |               30 |
+| Tim Maia                       |               30 |
+| Nirvana                        |               29 |
+| Lulu Santos                    |               28 |
+| Santana                        |               27 |
+| Djavan                         |               26 |
+| The Tea Party                  |               26 |
+| Milton Nascimento              |               26 |
+| Frank Sinatra                  |               24 |
+| Battlestar Galactica (Classic) |               24 |
+| Heroes                         |               23 |
+| Amy Winehouse                  |               23 |
+| Skank                          |               23 |
+| Gene Krupa                     |               22 |
++--------------------------------+------------------+
+50 rows in set (0.00 sec)
+
+mysql> 
+mysql> 
+mysql> 
+mysql> tee challenge_insert.txt
