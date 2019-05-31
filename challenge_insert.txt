@@ -1,0 +1,126 @@
+mysql> 
+mysql> INSERT INTO Album (Title, ArtistId)
+    -> VALUES ("Boy", 150);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> /*
+   /*> Get all of the relevant information that we need to enter all of
+   /*> tracks for U2's "Boy" album
+   /*> */
+mysql> SELECT AlbumId FROM Album WHERE Title = "Boy";
++---------+
+| AlbumId |
++---------+
+|     348 |
++---------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> SELECT MediaTypeId FROM MediaType WHERE Name = "Protected AAC audio file";
++-------------+
+| MediaTypeId |
++-------------+
+|           2 |
++-------------+
+1 row in set (0.09 sec)
+
+mysql> 
+mysql> SELECT GenreId FROM Genre WHERE Name = "Rock";
++---------+
+| GenreId |
++---------+
+|       1 |
++---------+
+1 row in set (0.00 sec)
+
+mysql> /*
+   /*> Use the above information to create the new tracks
+   /*> */
+mysql> INSERT INTO Track (Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice)
+    -> VALUES ("I Will Follow", 348, 2, 1, "U2", 220000, 1234, 0.99);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> 
+mysql> /* CHALLANGES: */
+mysql> INSERT INTO Track (Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice) VALUES ("Twilight", 348, 2, 1, "U2", 210000, 1234, 0.99);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> INSERT INTO Track (Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice) VALUES ("An Cat Dubh", 348, 2, 1, "U2", 110000, 1234, 0.99);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO Track (Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice) VALUES ("Into the Heart", 348, 2, 1, "U2", 200000, 1234, 0.99);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO Track (Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice) VALUES ("Out of Control", 348, 2, 1, "U2", 100000, 1234, 0.99);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO Track (Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice) VALUES ("Stories for Boys", 348, 2, 1, "U2", 150000, 1234, 0.99);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO Track (Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice) VALUES ("The Ocean", 348, 2, 1, "U2", 175000, 1234, 0.99);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO Track (Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice) VALUES ("A Day Without Me", 348, 2, 1, "U2", 185000, 1234, 0.99);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> 
+mysql> /* 
+   /*> Insert the remaining Tracks for the Album Boy (except for the last 2-3, insert those as part of Challenge Three)
+   /*> */
+mysql> 
+mysql> /*
+   /*> Run the following Query. It gives an error. Read and understand the error, then fix the problem
+   /*> 
+   /*>             Insert into Track (Name, AlbumId, GenreId, Composer, Milliseconds, Bytes, UnitPrice)
+   /*>             values("Extra Track", 348, 1, "U2", 290000, 1234, 0.99);
+   /*> */
+mysql> 
+mysql> Insert into Track (Name, AlbumId, GenreId, Composer, Milliseconds, Bytes, UnitPrice)
+    ->             values("Extra Track", 348, 1, "U2", 290000, 1234, 0.99);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`Chinook`.`Track`, CONSTRAINT `FK_TrackMediaTypeId` FOREIGN KEY (`MediaTypeId`) REFERENCES `MediaType` (`MediaTypeId`) ON DELETE NO ACTION ON UPDATE NO ACTION)
+mysql> desc Track;
++--------------+---------------+------+-----+---------+----------------+
+| Field        | Type          | Null | Key | Default | Extra          |
++--------------+---------------+------+-----+---------+----------------+
+| TrackId      | int(11)       | NO   | PRI | NULL    | auto_increment |
+| Name         | varchar(200)  | NO   |     | NULL    |                |
+| AlbumId      | int(11)       | YES  | MUL | NULL    |                |
+| MediaTypeId  | int(11)       | NO   | MUL | NULL    |                |
+| GenreId      | int(11)       | YES  | MUL | NULL    |                |
+| Composer     | varchar(220)  | YES  |     | NULL    |                |
+| Milliseconds | int(11)       | NO   |     | NULL    |                |
+| Bytes        | int(11)       | YES  |     | NULL    |                |
+| UnitPrice    | decimal(10,2) | NO   |     | NULL    |                |
++--------------+---------------+------+-----+---------+----------------+
+9 rows in set (0.00 sec)
+
+mysql> /* MediaTypeId is a Foreign key and it is set so it cannot have null value in Track table as shown in the table above, therefore we need to provide the value for it when adding the new track */
+mysql> INSERT INTO Track (Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice)
+    -> VALUES("Extra Track", 348, 2, 1, "U2", 290000, 1234, 0.99);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO Track (Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice)
+    -> VALUES("Another Time, Another Place", 348, 2, 1, "U2", 210000, 1234, 0.99), ("The Electric Co.", 348, 2, 1, "U2", 200000, 1234, 0.99), ("Shadows and Tall Trees", 348, 2, 1, "U2", 150000, 1234, 0.99);
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM Track WHERE AlbumId = 348;
++---------+-----------------------------+---------+-------------+---------+----------+--------------+-------+-----------+
+| TrackId | Name                        | AlbumId | MediaTypeId | GenreId | Composer | Milliseconds | Bytes | UnitPrice |
++---------+-----------------------------+---------+-------------+---------+----------+--------------+-------+-----------+
+|    3504 | I Will Follow               |     348 |           2 |       1 | U2       |       220000 |  1234 |      0.99 |
+|    3505 | Twilight                    |     348 |           2 |       1 | U2       |       210000 |  1234 |      0.99 |
+|    3506 | An Cat Dubh                 |     348 |           2 |       1 | U2       |       110000 |  1234 |      0.99 |
+|    3507 | Into the Heart              |     348 |           2 |       1 | U2       |       200000 |  1234 |      0.99 |
+|    3508 | Out of Control              |     348 |           2 |       1 | U2       |       100000 |  1234 |      0.99 |
+|    3509 | Stories for Boys            |     348 |           2 |       1 | U2       |       150000 |  1234 |      0.99 |
+|    3510 | The Ocean                   |     348 |           2 |       1 | U2       |       175000 |  1234 |      0.99 |
+|    3511 | A Day Without Me            |     348 |           2 |       1 | U2       |       185000 |  1234 |      0.99 |
+|    3513 | Extra Track                 |     348 |           2 |       1 | U2       |       290000 |  1234 |      0.99 |
+|    3514 | Another Time, Another Place |     348 |           2 |       1 | U2       |       210000 |  1234 |      0.99 |
+|    3515 | The Electric Co.            |     348 |           2 |       1 | U2       |       200000 |  1234 |      0.99 |
+|    3516 | Shadows and Tall Trees      |     348 |           2 |       1 | U2       |       150000 |  1234 |      0.99 |
++---------+-----------------------------+---------+-------------+---------+----------+--------------+-------+-----------+
+12 rows in set (0.01 sec)
+
+mysql> notee
